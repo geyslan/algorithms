@@ -9,11 +9,11 @@ int selection_sort(int *array, int n)
 	if (n < 1)
 		return -1;
 
-	for (int i = 0; i < n - 1; i++) {
+	for (int i = 0; i < n - 1; ++i) {
 		int min = i;
 
 		/* find next smallest */
-		for (int j = i + 1; j < n + 1; j++)
+		for (int j = i + 1; j <= n; ++j)
 			if (array[j] < array[min])
 				min = j;
 
