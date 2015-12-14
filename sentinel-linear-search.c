@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define LEN 20
+
 int sentinel_linear_search(int *arr, int n, int key)
 {
 	--n; /* considering that n is the real size of elements */
@@ -30,13 +32,12 @@ int sentinel_linear_search(int *arr, int n, int key)
 
 int main(void)
 {
-	int tab[100];
+	int array[LEN] = {3, 1, 4, 7, 10,
+			  20, 17, 19, 15, 16,
+			  18, 2, 5, 6, 8,
+			  9, 11, 13, 12, 14};
 
-	for (int i = 0; i < 100; ++i) {
-		tab[i] = i;
-	}
-
-	printf("Index: %d\n", sentinel_linear_search(tab, 100, 97));
+	printf("Index: %d\n", sentinel_linear_search(array, LEN, 14));
 
 	return 0;
 }
