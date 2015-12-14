@@ -11,17 +11,16 @@ int insertion_sort(int *array, int n)
 
 	for (int i = 1; i <= n; ++i) {
 		int tmp = array[i]; /* save the current value */
-		int prev = i - 1;
+		int prev;
 
 		/*
 		 * move elements that are greater than current value
 		 * one position ahead
 		 */
-		while (prev >= 0 && array[prev] > tmp) {
+		for (prev = i - 1; prev >= 0 && array[prev] > tmp; --prev)
 			array[prev + 1] = array[prev];
-			--prev;
-		}
-		/* replace current value to sorted position */
+
+		/* save current value to sorted position */
 		array[prev + 1] = tmp;
 	}
 
