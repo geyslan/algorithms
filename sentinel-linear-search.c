@@ -23,7 +23,7 @@ int sentinel_linear_search(int *arr, int n, int key)
 	arr[n] = last_member;
 
 	if ((i < n) ||
-	    (i == n && last_member == key)) /* worst case */
+	    (last_member == key)) /* worst case */
 		return i;
 
 	return -1;
