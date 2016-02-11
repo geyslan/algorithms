@@ -1,2 +1,2 @@
 # algorithms
-Algorithms study
+Algorithms and Data Structures study
