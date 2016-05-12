@@ -60,19 +60,18 @@ sll_node *sll_node_prev_by_pointer(sll_node *node, sll *list)
         if (!node || !list || !list->length)
                 return NULL;
 
-        if (node == list->first) {
+        if (node == list->first)
                 return NULL;
-        } else {
-                cur = list->first;
-                while (cur && cur != node) {
-                        prev = cur;
-                        cur = cur->next;
-                }
-                if (cur)
-                        return prev;
-        }
 
-        return NULL;
+        cur = list->first;
+        while (cur && cur != node) {
+                prev = cur;
+                cur = cur->next;
+        }
+        if (!cur)
+                return NULL;
+
+        return prev;
 }
 
 sll_node *sll_node_prev_by_index(int index, sll *list)
