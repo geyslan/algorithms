@@ -135,15 +135,14 @@ sll_node *sll_node_add_before_pointer(sll_node *cur, sll_node *new, sll *list)
         if (!cur || !new || !list)
                 return NULL;
 
-        if (cur == list->first) {
+        if (cur == list->first)
                 return sll_node_add_at_start(new, list);
-        } else {
-                prev = sll_node_prev_by_pointer(cur, list);
-                if (!prev)
-                        return NULL;
-                new->next = cur;
-                prev->next = new;
-        }
+
+        prev = sll_node_prev_by_pointer(cur, list);
+        if (!prev)
+                return NULL;
+        new->next = cur;
+        prev->next = new;
 
         ++list->length;
 
@@ -152,14 +151,17 @@ sll_node *sll_node_add_before_pointer(sll_node *cur, sll_node *new, sll *list)
 
 sll_node *sll_node_add_at_index(sll_node *node, sll *list, int index)
 {
-        sll_node *cur = sll_node_by_index(index, list);
+	sll_node *cur;
 
-        if (!cur && list && !list->length)
-                return sll_node_add_at_start(node, list);
-	else if (index >= list->length)
+	if (!list)
+	        return NULL;
+
+	cur = sll_node_by_index(index, list);
+
+	if (!cur || index >= list->length)
 		return sll_node_add_at_end(node, list);
 
-        return sll_node_add_before_pointer(cur, node, list);
+	return sll_node_add_before_pointer(cur, node, list);
 }
 
 sll_node *sll_node_add_at_middle(sll_node *node, sll *list)
@@ -178,14 +180,12 @@ sll_node *sll_node_add_at_start(sll_node *node, sll *list)
         if (!node || !list)
                 return NULL;
 
-        if (!list->length) {
-                list->first = node;
+        if (!list->length)
                 list->last = node;
-        } else {
+        else
                 node->next = list->first;
-                list->first = node;
-        }
 
+        list->first = node;
         ++list->length;
 
         return node;
@@ -196,14 +196,12 @@ sll_node *sll_node_add_at_end(sll_node *node, sll *list)
         if (!node || !list)
                 return NULL;
 
-        if (!list->length) {
+        if (!list->length)
                 list->first = node;
-                list->last = node;
-        } else {
+        else
                 list->last->next = node;
-                list->last = node;
-        }
 
+        list->last = node;
         ++list->length;
 
         return node;
@@ -231,21 +229,24 @@ int main(void)
 	node2 = sll_node_create(2);
 	node3 = sll_node_create(3);
 
-        sll_node_add_at_start(node1, list1);
-        sll_node_add_at_start(node2, list1);
         sll_node_add_at_start(node3, list1);
-        sll_node_add_at_end(sll_node_create(4), list1);
-        sll_node_add_at_end(sll_node_create(5), list1);
-        sll_node_add_at_end(sll_node_create(6), list1);
-        sll_node_add_at_end(sll_node_create(7), list1);
+        sll_node_add_at_start(node2, list1);
+        sll_node_add_at_start(node1, list1);
 
-	sll_node_add_at_index(sll_node_create(100), list1, 3);
-	sll_node_add_at_index(sll_node_create(0), list1, 0);
-	sll_node_add_at_index(sll_node_create(999), list1, list1->length - 1);
-	sll_node_add_at_index(sll_node_create(777), list1, list1->length);
+	sll_node_add_at_index(sll_node_create(4), list1, 3);
+	sll_node_add_at_index(sll_node_create(5), list1, 4);
+	sll_node_add_at_index(sll_node_create(6), list1, list1->length);
 
-	sll_node_add_at_middle(sll_node_create(500), list1);
-	sll_node_add_at_middle(sll_node_create(50), list1);
+        sll_node_add_at_end(sll_node_create(8), list1);
+        sll_node_add_at_end(sll_node_create(9), list1);
+        sll_node_add_at_end(sll_node_create(10), list1);
+        sll_node_add_at_end(sll_node_create(11), list1);
+	sll_node_add_at_end(sll_node_create(12), list1);
+	sll_node_add_at_end(sll_node_create(13), list1);
+
+	sll_node_add_at_middle(sll_node_create(7), list1);
+
+	sll_node_delete_by_index(12, list1);
 
 	sll_print_list(list1);
 
