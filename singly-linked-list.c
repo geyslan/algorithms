@@ -16,12 +16,17 @@ struct sll {
 
 sll *sll_create(void);
 void sll_delete(sll *list);
+sll *sll_copy(sll *from, sll *to);
+void sll_split(sll *list, sll *new_list, int after_index);
+void sll_reverse(sll *list);
+sll *sll_merge_new(sll *list1, sll *list2);
 sll_node *sll_node_create(int value);
 sll_node *sll_node_by_index(int index, sll *list);
 sll_node *sll_node_prev_by_pointer(sll_node *node, sll *list);
 sll_node *sll_node_prev_by_index(int index, sll *list);
 void sll_node_delete_by_pointer(sll_node *node, sll *list);
 void sll_node_delete_by_index(int index, sll *list);
+sll_node *sll_node_copy(sll_node *from);
 sll_node *sll_node_add_at_start(sll_node *node, sll *list);
 sll_node *sll_node_add_at_end(sll_node *node, sll *list);
 sll_node *sll_node_add_at_index(sll_node *node, sll *list, int index);
@@ -42,15 +47,104 @@ void sll_delete(sll *list)
 	free(list);
 }
 
+void sll_split(sll *list, sll *new_list, int after_index)
+{
+	sll_node *last_node;
+
+	if (!list || !new_list ||
+	    (after_index <= 0 || after_index >= list->length))
+		return;
+
+	last_node = sll_node_by_index(after_index, list);
+	if (!last_node)
+		return;
+
+	new_list->first = last_node->next;
+	new_list->last = list->last;
+	list->last = last_node;
+	list->last->next = NULL;
+
+	new_list->length = list->length - after_index - 1;
+	list->length -= new_list->length;
+}
+
+void sll_reverse(sll *list)
+{
+	sll_node *cur, *next, *prev = NULL;
+
+	if (!list)
+		return;
+
+	cur = list->first;
+	list->first = list->last;
+	list->last = cur;
+
+	while (cur) {
+		next = cur->next;
+		cur->next = prev;
+		prev = cur;
+		cur = next;
+	}
+}
+
+sll *sll_merge_new(sll *list1, sll *list2)
+{
+	sll *merged, *ret;
+	sll_node *node;
+
+	if (!list1 || !list2)
+		return NULL;
+
+	merged = sll_create();
+	if (!merged)
+		return NULL;
+
+	ret = sll_copy(list1, merged);
+	if (!ret)
+		goto err;
+	ret = sll_copy(list2, merged);
+	if (!ret)
+		goto err;
+
+	return merged;
+ err:
+	sll_delete(merged);
+	return ret;
+}
+
+sll *sll_copy(sll *from, sll *to)
+{
+	if (!from || !to)
+		return NULL;
+
+	for (sll_node *node = from->first; node; node = node->next) {
+		sll_node *node_copy = sll_node_copy(node);
+		if (!node_copy)
+			return NULL;
+		sll_node_add_at_end(node_copy, to);
+	}
+
+	return to;
+}
+
 sll_node *sll_node_create(int value)
 {
 	sll_node *node = calloc(1, sizeof(sll_node));
 
-	if (!node)
-		return NULL;
-	node->value = value;
+	if (node)
+		node->value = value;
 
 	return node;
+}
+
+sll_node *sll_node_copy(sll_node *from)
+{
+	sll_node *to = NULL;
+
+	if (from)
+		to = sll_node_create(from->value);
+
+	return to;
 }
 
 sll_node *sll_node_prev_by_pointer(sll_node *node, sll *list)
@@ -221,10 +315,11 @@ void sll_print_list(sll *list)
 
 int main(void)
 {
-	sll *list1;
+	sll *list1, *list2, *list_merged;
 	sll_node *node1, *node2, *node3;
 
 	list1 = sll_create();
+	list2 = sll_create();
 	node1 = sll_node_create(1);
 	node2 = sll_node_create(2);
 	node3 = sll_node_create(3);
@@ -250,7 +345,21 @@ int main(void)
 
 	sll_print_list(list1);
 
+	sll_split(list1, list2, 4);
+	sll_print_list(list1);
+	sll_print_list(list2);
+
+	list_merged = sll_merge_new(list1, list2);
+	sll_print_list(list_merged);
+
+	sll_reverse(list_merged);
+	sll_print_list(list_merged);
+	sll_reverse(list_merged);
+	sll_print_list(list_merged);
+
 	sll_delete(list1);
+	sll_delete(list2);
+	sll_delete(list_merged);
 
 	return 0;
 }
