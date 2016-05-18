@@ -4,26 +4,26 @@
 
 int sentinel_linear_search(int *arr, int n, int key)
 {
-	--n; /* considering that n is the real size of elements */
+	int last_value, i;
 
-	if (n < 1)
+	/* considering that --n is the real size of elements */
+	if (--n < 1)
 		return -1;
 
-	int last_member = arr[n];
+	last_value = arr[n];
 
 	/* set array last member as the key */
 	arr[n] = key;
 
-	int i = 0;
-	while (arr[i] != key) {
+	i = 0;
+	while (arr[i] != key)
 		++i;
-	}
 
 	/* recover the real array last member */
-	arr[n] = last_member;
+	arr[n] = last_value;
 
 	if ((i < n) ||
-	    (last_member == key)) /* worst case */
+	    (last_value == key)) /* worst case */
 		return i;
 
 	return -1;
