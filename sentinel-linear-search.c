@@ -22,11 +22,7 @@ int sentinel_linear_search(int key, int *arr, int n)
 	/* recover the real array last member */
 	arr[n] = last_value;
 
-	if ((i < n) ||
-	    (last_value == key)) /* worst case */
-		return i;
-
-	return -1;
+	return (arr[i] == key) ? i : -1;
 }
 
 
