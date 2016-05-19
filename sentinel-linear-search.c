@@ -2,7 +2,7 @@
 
 #define LEN 20
 
-int sentinel_linear_search(int *arr, int n, int key)
+int sentinel_linear_search(int key, int *arr, int n)
 {
 	int last_value, i;
 
@@ -37,7 +37,7 @@ int main(void)
 			  18, 2, 5, 6, 8,
 			  9, 11, 13, 12, 14};
 
-	printf("Index: %d\n", sentinel_linear_search(array, LEN, 14));
+	printf("Index: %d\n", sentinel_linear_search(14, array, LEN));
 
 	return 0;
 }
