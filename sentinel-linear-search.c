@@ -6,7 +6,7 @@ int sentinel_linear_search(int key, int *arr, int n)
 {
 	int last_value, i;
 
-	/* considering that --n is the real size of elements */
+	/* considering that n is the real size of the array */
 	if (--n < 1)
 		return -1;
 
